@@ -23,13 +23,47 @@ public class StepDefinition extends Utils {
 
 
     @Given("Create Board Payload with {string}")
-    public void create_board_payload_with(String boardName) {
+    public void create_board_payload_with(String boardName) throws IOException {
         reqSpec = given()
                 .spec(requestSpecification())
                 .queryParam("name", boardName);
 
     }
 
+    @When("user calls {string} with {string} http request")
+    public void user_calls_with_http_request(String resource, String httpMethod) {
+        APIResources resourceAPI = APIResources.valueOf(resource);
+
+        if (httpMethod.equalsIgnoreCase("Post")) {
+            response = reqSpec
+                    .when()
+                    .post(resourceAPI.getResource());
+        }
+        else if (httpMethod.equalsIgnoreCase("Get")) {
+            response = reqSpec
+                    .when()
+                    .get(resourceAPI.getResource());
+        }
+        else if (httpMethod.equalsIgnoreCase("Put")) {
+            response = reqSpec
+                    .when()
+                    .put(resourceAPI.getResource());
+        }
+        else if (httpMethod.equalsIgnoreCase("Delete")) {
+            response = reqSpec
+                    .when()
+                    .delete(resourceAPI.getResource());
+        }
+
+    }
+    @Then("the API call is success with status code {int}")
+    public void the_api_call_is_success_with_status_code(int int1) {
+        assertEquals(int1, response.getStatusCode());
+    }
+    @Then("{string} in response body is {string}")
+    public void in_response_body_is(String key, String expectedValue) {
+        assertEquals(expectedValue, getJsonPath(response, key));
+    }
 
     /*
     static String placeID;
