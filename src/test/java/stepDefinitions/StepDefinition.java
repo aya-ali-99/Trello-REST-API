@@ -65,8 +65,8 @@ public class StepDefinition extends Utils {
         assertEquals(expectedValue, getJsonPath(response, key));
     }
 
-    @Then("verify board is created that maps to {string} using {string}")
-    public void verify_board_is_created_that_maps_to_using(String expectedName, String resource) throws IOException {
+    @Then("verify board exists that maps to {string} using {string}")
+    public void verify_board_exists_that_maps_to_using(String expectedName, String resource) throws IOException {
         boardID = getJsonPath(response, "id");
         reqSpec = given()
                 .spec(requestSpecification())
@@ -96,4 +96,11 @@ public class StepDefinition extends Utils {
         assertEquals(int1, response.getStatusCode());
     }
 
+    @Given("a board is created using CreateBoardAPI and new board name {string}")
+    public void a_board_is_created_using_create_board_api_and_new_board_name(String newName) throws IOException {
+        reqSpec = given()
+                .spec(requestSpecification())
+                .pathParam("id", boardID)
+                .queryParam("name", newName);
+    }
 }

@@ -7,13 +7,19 @@ Feature: Validating Board APIs
     When user calls "CreateBoardAPI" with "Post" http request
     Then the API call is success with status code 200
     And "name" in response body is "<name>"
-    And verify board is created that maps to "<name>" using "GetBoardAPI"
+    And verify board exists that maps to "<name>" using "GetBoardAPI"
 
   Examples:
     | name          |
     | RestTestBoard |
 
-
+  @UpdateBoard @Board
+  Scenario: Verify if Board is being successfully updated using UpdateBoardAPI
+    Given a board is created using CreateBoardAPI and new board name "UpdatedBoard"
+    When user calls "UpdateBoardAPI" with "Put" http request
+    Then the API call is success with status code 200
+    And "name" in response body is "UpdatedBoard"
+    And verify board exists that maps to "UpdatedBoard" using "GetBoardAPI"
 
   @DeleteBoard @Board
   Scenario: Verify if Board is being successfully deleted using DeleteBoardAPI
@@ -22,26 +28,3 @@ Feature: Validating Board APIs
     Then the API call is success with status code 200
     And verify the board with ID no longer exists via "GetBoardAPI" with expected status 404
 
-#Feature: Validating Place APIs
-#
-#  @AddPlace @Regression
-#  Scenario Outline: Verify if Place is being successfully added using AddPlaceAPI
-#    Given Add Place Payload with "<name>" "<language> " "<address>"
-#    When user calls "AddPlaceAPI" with "Post" http request
-#    Then the API call is success with status code 200
-#    And "status" in response body is "OK"
-#    And "scope" in response body is "APP"
-#    And verify place_id created that maps to "<name>" using "GetPlaceAPI"
-#
-#  Examples:
-#    | name    | language | address            |
-#    | AAhouse | English  | World cross center |
-#    | BBhouse | Spanish  | Sea cross center   |
-#
-#
-#  @DeletePlace @Regression
-#  Scenario: Verify if Delete Place functionality is working
-#    Given DeletePlace Payload
-#    When user calls "DeletePlaceAPI" with "Post" http request
-#    Then the API call is success with status code 200
-#    And "status" in response body is "OK"
