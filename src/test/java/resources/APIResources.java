@@ -2,9 +2,9 @@ package resources;
 
 public enum APIResources {
     CreateBoardAPI("/1/boards/"),
-    GetBoardAPI("1/boards/"),
-    UpdateBoardAPI("1/boards/"),
-    DeleteBoardAPI("1/boards/");
+    GetBoardAPI("1/boards/{id}"),
+    UpdateBoardAPI("1/boards/{id}"),
+    DeleteBoardAPI("1/boards/{id}");
 
     private String resource;
 

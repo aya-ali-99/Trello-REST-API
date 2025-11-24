@@ -65,70 +65,35 @@ public class StepDefinition extends Utils {
         assertEquals(expectedValue, getJsonPath(response, key));
     }
 
-    /*
-    static String placeID;
-
-
-    @Given("Add Place Payload with {string} {string} {string}")
-    public void add_place_payload_with(String name, String language, String address) throws IOException {
-
+    @Then("verify board is created that maps to {string} using {string}")
+    public void verify_board_is_created_that_maps_to_using(String expectedName, String resource) throws IOException {
+        boardID = getJsonPath(response, "id");
         reqSpec = given()
                 .spec(requestSpecification())
-                .body(data.addPlacePayload(name, language, address));
+                .pathParam("id", boardID);
 
-    }
-    @When("user calls {string} with {string} http request")
-    public void user_calls_with_http_request(String resource, String httpMethod) {
-        APIResources resourceAPI = APIResources.valueOf(resource);
+        user_calls_with_http_request(resource, "Get");
 
-        if (httpMethod.equalsIgnoreCase("Post")) {
-            response = reqSpec
-                    .when()
-                    .post(resourceAPI.getResource());
-        }
-        else if (httpMethod.equalsIgnoreCase("Get")) {
-            response = reqSpec
-                    .when()
-                    .get(resourceAPI.getResource());
-        }
-        else if (httpMethod.equalsIgnoreCase("Delete")) {
-            response = reqSpec
-                    .when()
-                    .delete(resourceAPI.getResource());
-        }
-
+        String actualBoardName = getJsonPath(response, "name");
+        assertEquals(expectedName, actualBoardName);
     }
 
-    @Then("the API call is success with status code {int}")
-    public void the_api_call_is_success_with_status_code(int int1) {
+    @Given("a board is created using CreateBoardAPI")
+    public void a_board_is_created_using_create_board_api() throws IOException {
+        reqSpec = given()
+                .spec(requestSpecification())
+                .pathParam("id", boardID);
+    }
+
+    @Then("verify the board with ID no longer exists via {string} with expected status {int}")
+    public void verify_the_board_with_id_no_longer_exists_via_with_expected_status(String resource, int int1) throws IOException {
+        reqSpec = given()
+                .spec(requestSpecification())
+                .pathParam("id", boardID);
+
+        user_calls_with_http_request(resource, "Get");
+
         assertEquals(int1, response.getStatusCode());
     }
 
-    @Then("{string} in response body is {string}")
-    public void in_response_body_is(String key, String expectedValue) {
-
-        assertEquals(expectedValue, getJsonPath(response, key));
-    }
-
-    @Then("verify place_id created that maps to {string} using {string}")
-    public void verify_place_id_created_that_maps_to_using(String expectedName, String resource) throws IOException {
-
-        placeID = getJsonPath(response, "place_id");
-        reqSpec = given()
-                .spec(requestSpecification())
-                .queryParam("place_id", placeID);
-
-        user_calls_with_http_request(resource, "Get");
-        String actualPlaceName = getJsonPath(response, "name");
-        assertEquals(expectedName, actualPlaceName);
-    }
-
-    @Given("DeletePlace Payload")
-    public void delete_place_payload() throws IOException {
-        reqSpec = given()
-                .spec(requestSpecification())
-                .body(data.deletePlacePayload(placeID));
-    }
-
-     */
 }
