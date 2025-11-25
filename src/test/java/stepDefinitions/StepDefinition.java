@@ -20,6 +20,8 @@ public class StepDefinition extends Utils {
     Response response;
     TestDataBuild data = new TestDataBuild();
     static String boardID;
+    static String labelID;
+
 
 
     @Given("Create Board Payload with {string}")
@@ -65,17 +67,23 @@ public class StepDefinition extends Utils {
         assertEquals(expectedValue, getJsonPath(response, key));
     }
 
-    @Then("verify board exists that maps to {string} using {string}")
-    public void verify_board_exists_that_maps_to_using(String expectedName, String resource) throws IOException {
-        boardID = getJsonPath(response, "id");
-        reqSpec = given()
-                .spec(requestSpecification())
-                .pathParam("id", boardID);
-
+    @Then("verify {string} exists that maps to {string} using {string}")
+    public void verify_exists_that_maps_to_using(String objectName, String expectedName, String resource) throws IOException {
+        if(objectName.equalsIgnoreCase("board")) {
+            boardID = getJsonPath(response, "id");
+            reqSpec = given()
+                    .spec(requestSpecification())
+                    .pathParam("id", boardID);
+        }
+        else if(objectName.equalsIgnoreCase("label")) {
+            labelID = getJsonPath(response, "id");
+            reqSpec = given()
+                    .spec(requestSpecification())
+                    .pathParam("id", labelID);
+        }
         user_calls_with_http_request(resource, "Get");
-
-        String actualBoardName = getJsonPath(response, "name");
-        assertEquals(expectedName, actualBoardName);
+        String actualName = getJsonPath(response, "name");
+        assertEquals(expectedName, actualName);
     }
 
     @Given("a board is created using CreateBoardAPI")
@@ -85,14 +93,25 @@ public class StepDefinition extends Utils {
                 .pathParam("id", boardID);
     }
 
-    @Then("verify the board with ID no longer exists via {string} with expected status {int}")
-    public void verify_the_board_with_id_no_longer_exists_via_with_expected_status(String resource, int int1) throws IOException {
-        reqSpec = given()
-                .spec(requestSpecification())
-                .pathParam("id", boardID);
-
+    @Then("verify the {string} with ID no longer exists via {string} with expected status {int}")
+    public void verify_the_with_id_no_longer_exists_via_with_expected_status(String objectName, String resource, int int1) throws IOException {
+        if(objectName.toLowerCase() == "board") {
+            reqSpec = given()
+                    .spec(requestSpecification())
+                    .pathParam("id", boardID);
+            boardID = "Deleted";
+        }
+        else if(objectName.toLowerCase() == "label") {
+            reqSpec = given()
+                    .spec(requestSpecification())
+                    .pathParam("id", labelID);
+            labelID ="Deleted";
+        }
+        System.out.println("Label ID: " + labelID);
+        System.out.println("Board ID: " + boardID);
         user_calls_with_http_request(resource, "Get");
-
+        System.out.println("Label ID: " + labelID);
+        System.out.println("Board ID: " + boardID);
         assertEquals(int1, response.getStatusCode());
     }
 
@@ -102,5 +121,28 @@ public class StepDefinition extends Utils {
                 .spec(requestSpecification())
                 .pathParam("id", boardID)
                 .queryParam("name", newName);
+    }
+
+    @Given("create label payload with name {string} and color {string}")
+    public void create_label_payload_with_name_and_color(String labelName, String labelColor) throws IOException {
+        reqSpec = given()
+                .spec(requestSpecification())
+                .queryParam("name", labelName)
+                .queryParam("color", labelColor)
+                .queryParam("idBoard", boardID);
+    }
+
+    @Given("a label is created using CreateLabelAPI and new label name {string}")
+    public void a_label_is_created_using_create_label_api_and_new_label_name(String newName) throws IOException {
+        reqSpec = given()
+                .spec(requestSpecification())
+                .pathParam("id", labelID)
+                .queryParam("name", newName);
+    }
+    @Given("a label is created using CreateLabelAPI")
+    public void a_label_is_created_using_create_label_api() throws IOException {
+        reqSpec = given()
+                .spec(requestSpecification())
+                .pathParam("id", labelID);
     }
 }
