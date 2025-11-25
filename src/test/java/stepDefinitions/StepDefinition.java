@@ -22,6 +22,9 @@ public class StepDefinition extends Utils {
     static String boardID;
     static String labelID;
 
+    static boolean boardDeleted = false;
+    static boolean labelDeleted = false;
+
 
 
     @Given("Create Board Payload with {string}")
@@ -70,12 +73,14 @@ public class StepDefinition extends Utils {
     @Then("verify {string} exists that maps to {string} using {string}")
     public void verify_exists_that_maps_to_using(String objectName, String expectedName, String resource) throws IOException {
         if(objectName.equalsIgnoreCase("board")) {
+            boardDeleted = false;
             boardID = getJsonPath(response, "id");
             reqSpec = given()
                     .spec(requestSpecification())
                     .pathParam("id", boardID);
         }
         else if(objectName.equalsIgnoreCase("label")) {
+            labelDeleted = false;
             labelID = getJsonPath(response, "id");
             reqSpec = given()
                     .spec(requestSpecification())
@@ -95,23 +100,23 @@ public class StepDefinition extends Utils {
 
     @Then("verify the {string} with ID no longer exists via {string} with expected status {int}")
     public void verify_the_with_id_no_longer_exists_via_with_expected_status(String objectName, String resource, int int1) throws IOException {
-        if(objectName.toLowerCase() == "board") {
+        if(objectName.equalsIgnoreCase("board")) {
+            boardDeleted = true;
             reqSpec = given()
                     .spec(requestSpecification())
                     .pathParam("id", boardID);
-            boardID = "Deleted";
         }
-        else if(objectName.toLowerCase() == "label") {
+        else if(objectName.equalsIgnoreCase("label")) {
+            labelDeleted = true;
             reqSpec = given()
                     .spec(requestSpecification())
                     .pathParam("id", labelID);
-            labelID ="Deleted";
         }
-        System.out.println("Label ID: " + labelID);
-        System.out.println("Board ID: " + boardID);
+
         user_calls_with_http_request(resource, "Get");
-        System.out.println("Label ID: " + labelID);
-        System.out.println("Board ID: " + boardID);
+
+        System.out.println(boardDeleted);
+        System.out.println(labelDeleted);
         assertEquals(int1, response.getStatusCode());
     }
 

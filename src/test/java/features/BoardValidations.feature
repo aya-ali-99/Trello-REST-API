@@ -1,4 +1,3 @@
-@Board
 Feature: Validating Board APIs
 
 
@@ -16,11 +15,11 @@ Feature: Validating Board APIs
 
   @UpdateBoard @E2E
   Scenario: Verify if Board is being successfully updated using UpdateBoardAPI
-    Given a board is created using CreateBoardAPI and new board name "UpdatedBoard"
+    Given a board is created using CreateBoardAPI and new board name "NewUpdatedBoard"
     When user calls "UpdateBoardAPI" with "Put" http request
     Then the API call is success with status code 200
-    And "name" in response body is "UpdatedBoard"
-    And verify "board" exists that maps to "UpdatedBoard" using "GetBoardAPI"
+    And "name" in response body is "NewUpdatedBoard"
+    And verify "board" exists that maps to "NewUpdatedBoard" using "GetBoardAPI"
 
   @DeleteBoard
   Scenario: Verify if Board is being successfully deleted using DeleteBoardAPI
