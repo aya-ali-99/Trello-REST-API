@@ -38,13 +38,6 @@ public class Hooks {
 
         StepDefinition s = new StepDefinition();
 
-        if(!StepDefinition.labelDeleted)
-        {
-            System.out.println("HOOK Required Label Deleted");
-            s.a_label_is_created_using_create_label_api();
-            s.user_calls_with_http_request("DeleteLabelAPI", "Delete");
-            s.the_api_call_is_success_with_status_code(200);
-        }
         if(!StepDefinition.boardDeleted) {
             System.out.println("HOOK Required Board Deleted");
             s.a_board_is_created_using_create_board_api();
