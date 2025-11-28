@@ -19,7 +19,7 @@ Feature: Validating Label APIs
     And "name" in response body is "UpdatedLabel"
     And verify "label" exists that maps to "UpdatedLabel" using "GetLabelAPI"
 
-  @DeleteLabel @E2E @Label
+  @DeleteLabel @Label
   Scenario: Verify if Label is being successfully deleted using DeleteLabelAPI
     Given a label is created using CreateLabelAPI
     When user calls "DeleteLabelAPI" with "Delete" http request
