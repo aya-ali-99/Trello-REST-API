@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class Hooks {
 
-    @Before("@Label or @UpdateBoard or @DeleteBoard")
+    @Before("@Label or @UpdateBoard or @DeleteBoard or @List or @Card or @Checklist")
     public static void requiredBoardCreated() throws IOException {
         StepDefinition s = new StepDefinition();
         if(StepDefinition.boardID == null || StepDefinition.boardDeleted) {
@@ -30,18 +30,8 @@ public class Hooks {
         }
     }
 
-    @Before("@CreateList")
-    public static void requiredBoardForList() throws IOException {
-        StepDefinition s = new StepDefinition();
-        if(StepDefinition.boardID == null || StepDefinition.boardDeleted) {
-            System.out.println("Required Board Created for List");
-            s.create_board_payload_with("List_Test_Board");
-            s.user_calls_with_http_request("CreateBoardAPI", "Post");
-            s.verify_exists_that_maps_to_using("board","List_Test_Board", "GetBoardAPI");
-        }
-    }
 
-    @Before("@UpdateList or @ArchiveList")
+    @Before("@UpdateList or @ArchiveList or @Card or @Checklist")
     public void requiredListCreated() throws IOException {
         StepDefinition s = new StepDefinition();
         if(StepDefinition.listID == null || StepDefinition.listArchived) {
@@ -63,24 +53,8 @@ public class Hooks {
         }
     }
 
-    @Before("@CreateCard")
-    public static void requiredListForCard() throws IOException {
-        StepDefinition s = new StepDefinition();
-        if(StepDefinition.boardID == null || StepDefinition.boardDeleted) {
-            System.out.println("Required Board Created for Card");
-            s.create_board_payload_with("Card_Test_Board");
-            s.user_calls_with_http_request("CreateBoardAPI", "Post");
-            s.verify_exists_that_maps_to_using("board","Card_Test_Board", "GetBoardAPI");
-        }
-        if(StepDefinition.listID == null || StepDefinition.listArchived) {
-            System.out.println("Required List Created for Card");
-            s.create_list_payload_with_name("Card_Test_List");
-            s.user_calls_with_http_request("CreateListAPI", "Post");
-            s.verify_exists_that_maps_to_using("list","Card_Test_List", "GetListAPI");
-        }
-    }
 
-    @Before("@UpdateCard or @DeleteCard")
+    @Before("@UpdateCard or @DeleteCard or @Checklist")
     public void requiredCardCreated() throws IOException {
         StepDefinition s = new StepDefinition();
         if(StepDefinition.cardID == null || StepDefinition.cardDeleted) {
@@ -91,28 +65,6 @@ public class Hooks {
         }
     }
 
-    @Before("@CreateChecklist")
-    public static void requiredCardForChecklist() throws IOException {
-        StepDefinition s = new StepDefinition();
-        if(StepDefinition.boardID == null || StepDefinition.boardDeleted) {
-            System.out.println("Required Board Created for Checklist");
-            s.create_board_payload_with("Checklist_Test_Board");
-            s.user_calls_with_http_request("CreateBoardAPI", "Post");
-            s.verify_exists_that_maps_to_using("board","Checklist_Test_Board", "GetBoardAPI");
-        }
-        if(StepDefinition.listID == null || StepDefinition.listArchived) {
-            System.out.println("Required List Created for Checklist");
-            s.create_list_payload_with_name("Checklist_Test_List");
-            s.user_calls_with_http_request("CreateListAPI", "Post");
-            s.verify_exists_that_maps_to_using("list","Checklist_Test_List", "GetListAPI");
-        }
-        if(StepDefinition.cardID == null || StepDefinition.cardDeleted) {
-            System.out.println("Required Card Created for Checklist");
-            s.create_card_payload_with_name("Checklist_Test_Card");
-            s.user_calls_with_http_request("CreateCardAPI", "Post");
-            s.verify_exists_that_maps_to_using("card","Checklist_Test_Card", "GetCardAPI");
-        }
-    }
 
     @Before("@UpdateChecklist or @DeleteChecklist")
     public void requiredChecklistCreated() throws IOException {
@@ -125,14 +77,14 @@ public class Hooks {
         }
     }
 
-    @AfterAll
-    public static void requiredBoardDeleted() throws IOException {
-        StepDefinition s = new StepDefinition();
-        if(!StepDefinition.boardDeleted) {
-            System.out.println("HOOK Required Board Deleted");
-            s.a_board_is_created_using_create_board_api();
-            s.user_calls_with_http_request("DeleteBoardAPI", "Delete");
-            s.the_api_call_is_success_with_status_code(200);
-        }
-    }
+//    @AfterAll
+//    public static void requiredBoardDeleted() throws IOException {
+//        StepDefinition s = new StepDefinition();
+//        if(!StepDefinition.boardDeleted) {
+//            System.out.println("HOOK Required Board Deleted");
+//            s.a_board_is_created_using_create_board_api();
+//            s.user_calls_with_http_request("DeleteBoardAPI", "Delete");
+//            s.the_api_call_is_success_with_status_code(200);
+//        }
+//    }
 }
