@@ -77,14 +77,14 @@ public class Hooks {
         }
     }
 
-//    @AfterAll
-//    public static void requiredBoardDeleted() throws IOException {
-//        StepDefinition s = new StepDefinition();
-//        if(!StepDefinition.boardDeleted) {
-//            System.out.println("HOOK Required Board Deleted");
-//            s.a_board_is_created_using_create_board_api();
-//            s.user_calls_with_http_request("DeleteBoardAPI", "Delete");
-//            s.the_api_call_is_success_with_status_code(200);
-//        }
-//    }
+    @AfterAll
+    public static void requiredBoardDeleted() throws IOException {
+        StepDefinition s = new StepDefinition();
+        if(!StepDefinition.boardDeleted) {
+            System.out.println("HOOK Required Board Deleted");
+            s.a_board_is_created_using_create_board_api();
+            s.user_calls_with_http_request("DeleteBoardAPI", "Delete");
+            s.the_api_call_is_success_with_status_code(200);
+        }
+    }
 }
