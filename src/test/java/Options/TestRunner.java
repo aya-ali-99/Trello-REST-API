@@ -10,8 +10,8 @@ import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 @CucumberOptions(features = "src/test/java/features",
         plugin = {"pretty", "json:target/jsonReports/cucumber-report.json"},
-        glue = {"stepDefinitions"})
-        //,tags= "@E2E")
+        glue = {"stepDefinitions"}
+        ,tags= "@E2E")
 public class TestRunner {
 
 }

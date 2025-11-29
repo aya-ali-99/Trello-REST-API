@@ -137,6 +137,7 @@ public class StepDefinition extends Utils {
                 .queryParam("idBoard", boardID);
     }
 
+
     @Given("a label is created using CreateLabelAPI and new label name {string}")
     public void a_label_is_created_using_create_label_api_and_new_label_name(String newName) throws IOException {
         reqSpec = given()
@@ -150,4 +151,5 @@ public class StepDefinition extends Utils {
                 .spec(requestSpecification())
                 .pathParam("id", labelID);
     }
+
 }

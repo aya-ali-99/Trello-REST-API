@@ -8,14 +8,14 @@ import java.io.IOException;
 
 public class Hooks {
 
-    @Before("@CreateLabel")
+    @Before("@Label or @UpdateBoard or @DeleteBoard")
     public static void requiredBoardCreated() throws IOException {
         StepDefinition s = new StepDefinition();
         if(StepDefinition.boardID == null || StepDefinition.boardDeleted) {
             System.out.println("Required Board Created");
-            s.create_board_payload_with("Peep_Peep_Test_Board");
+            s.create_board_payload_with("Hook_Test_Board");
             s.user_calls_with_http_request("CreateBoardAPI", "Post");
-            s.verify_exists_that_maps_to_using("board","Peep_Peep_Test_Board", "GetBoardAPI");
+            s.verify_exists_that_maps_to_using("board","Hook_Test_Board", "GetBoardAPI");
         }
     }
 
